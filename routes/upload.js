@@ -43,6 +43,8 @@ function readCSV(caminhoArquivo, funcao){
 }
 
 
+//varre a lista da tela e a lista do banco primeiramente procurando objetivos e indicadores iguais
+//depois verifica se existe alguma modificação no ano ou no valor do mesmo 
 function varreObjeto(arrayArquivo,listaBanco){
   if(listaBanco.length!=undefined && listaBanco.length>0){
 
@@ -53,19 +55,12 @@ function varreObjeto(arrayArquivo,listaBanco){
   		   listaBanco[j].indicador == arrayArquivo[i].indicador){
       			if(convertDate(listaBanco[j].data) != arrayArquivo[i].data ||
       				listaBanco[j].valor != arrayArquivo[i].valor){
-      					console.log('Update: ' + listaBanco[j].valor + ' : ' + arrayArquivo[i].valor +
-      						' - ' + convertDate(listaBanco[j].data) + ' : ' + arrayArquivo[i].data);
+      					//Irá cair aqui caso a data ou o valor esteja diferentes
       					//mainDb.update(arrayArquivo[i],listaBanco[j].id);
-
-      					//console.log(listaBanco[j].data); 
-      					//console.log(convertDate(listaBanco[j].data) + ' - ' + arrayArquivo[i].data);
-      					//console.log(listaBanco[j].valor + ' - ' + arrayArquivo[i].valor);
-      					//console.log(arrayArquivo[i].objetivo + ' - ' + listaBanco[j].id)
+      					console.log(''); 
+      					console.log('Update!');
       			}
-      	//console.log('É igual ' + listaBanco[j].objetivo + ' = ' + arrayArquivo[i].objetivo);
-    	}else{
-      		
-    	}   
+    	}
   	}
   }
 
@@ -73,21 +68,12 @@ function varreObjeto(arrayArquivo,listaBanco){
 		//Irá cair nesse else quando a tabela objetivoDado estiver vazia
 		console.log('tabela objetivoDado vazia');
 		mainDb.findObjetivo(function(listaBanco){  		
-  		//chama a função que irá varrer o banco a procura da existencia de objetivo e indicador iguais ;
+  		//chama a função que irá varrer o banco a procura da existencia de objetivo e indicador iguais 
   		verificaObjetivoIndicador(listaBanco,arrayArquivo);
   	});
 
-/*
-	console.log(arrayArquivo.length);
-	for(var i = 0;i < arrayArquivo.length;i++){
-		arrayArquivo[i].data = formatDate(arrayArquivo[i].data);
-		console.log('banco vazio');
-		//mainDb.setDB(arrayArquivo[i]);		
-	}
-*/
 }
 }
-
 
 //Formata a data do objeto csv q está sendo enviado para persistir no banco.
 function formatDate(data){
@@ -131,12 +117,12 @@ function getDateTimeNow(){
   	return dateConcat;
 };
 
-//Ao salvar um objetoDado verifica se existe na tabela objetivo a existencia do objetivo e indicador
+//Ao salvar um objetoDado verifica se existe na tabela objetivo o seu correspondente de objetivo e indicador
 function verificaObjetivoIndicador(listaBanco,arrayArquivo){	
 	for(var i = 0;i < arrayArquivo.length;i++){
 		for(var j = 0;j < listaBanco.length;j++){
 			if(listaBanco[j].objetivo == arrayArquivo[i].objetivo && 
-  		   listaBanco[j].indicador == arrayArquivo[i].indicador){
+  		   		listaBanco[j].indicador == arrayArquivo[i].indicador){
 				arrayArquivo[i].data = formatDate(arrayArquivo[i].data);				
 				mainDb.setDB(arrayArquivo[i], listaBanco[j].id);
 			}
