@@ -53,7 +53,8 @@ function varreObjeto(arrayArquivo,listaBanco){
   		   listaBanco[j].indicador == arrayArquivo[i].indicador){
       			if(convertDate(listaBanco[j].data) != arrayArquivo[i].data ||
       				listaBanco[j].valor != arrayArquivo[i].valor){
-      					console.log('Update: ' +arrayArquivo[i].objetivo + ' - ' + listaBanco[j].objetivo);
+      					console.log('Update: ' + listaBanco[j].valor + ' : ' + arrayArquivo[i].valor +
+      						' - ' + convertDate(listaBanco[j].data) + ' : ' + arrayArquivo[i].data);
       					//mainDb.update(arrayArquivo[i],listaBanco[j].id);
 
       					//console.log(listaBanco[j].data); 
@@ -136,7 +137,7 @@ function verificaObjetivoIndicador(listaBanco,arrayArquivo){
 		for(var j = 0;j < listaBanco.length;j++){
 			if(listaBanco[j].objetivo == arrayArquivo[i].objetivo && 
   		   listaBanco[j].indicador == arrayArquivo[i].indicador){
-				console.log('Irá salvar : ' + arrayArquivo[i].objetivo);
+				arrayArquivo[i].data = formatDate(arrayArquivo[i].data);				
 				mainDb.setDB(arrayArquivo[i], listaBanco[j].id);
 			}
 		}
