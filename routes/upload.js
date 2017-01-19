@@ -53,15 +53,14 @@ function varreObjeto(arrayArquivo,listaBanco){
   		   listaBanco[j].indicador == arrayArquivo[i].indicador){
       			if(convertDate(listaBanco[j].data) != arrayArquivo[i].data ||
       				listaBanco[j].valor != arrayArquivo[i].valor){
-      				console.log(arrayArquivo[i].objetivo + ' - ' + listaBanco[j].objetivo);
+      					console.log('Update: ' +arrayArquivo[i].objetivo + ' - ' + listaBanco[j].objetivo);
+      					//mainDb.update(arrayArquivo[i],listaBanco[j].id);
+
       					//console.log(listaBanco[j].data); 
       					//console.log(convertDate(listaBanco[j].data) + ' - ' + arrayArquivo[i].data);
       					//console.log(listaBanco[j].valor + ' - ' + arrayArquivo[i].valor);
       					//console.log(arrayArquivo[i].objetivo + ' - ' + listaBanco[j].id)
-      					//mainDb.update(arrayArquivo[i],listaBanco[j].id);
       			}
-      				
-      			
       	//console.log('É igual ' + listaBanco[j].objetivo + ' = ' + arrayArquivo[i].objetivo);
     	}else{
       		
@@ -69,13 +68,22 @@ function varreObjeto(arrayArquivo,listaBanco){
   	}
   }
 
-}else{
+}else{	
+		//Irá cair nesse else quando a tabela objetivoDado estiver vazia
+		console.log('tabela objetivoDado vazia');
+		mainDb.findObjetivo(function(listaBanco){  		
+  		//chama a função que irá varrer o banco a procura da existencia de objetivo e indicador iguais ;
+  		verificaObjetivoIndicador(listaBanco,arrayArquivo);
+  	});
+
+/*
 	console.log(arrayArquivo.length);
 	for(var i = 0;i < arrayArquivo.length;i++){
 		arrayArquivo[i].data = formatDate(arrayArquivo[i].data);
 		console.log('banco vazio');
 		//mainDb.setDB(arrayArquivo[i]);		
 	}
+*/
 }
 }
 
@@ -121,3 +129,16 @@ function getDateTimeNow(){
 
   	return dateConcat;
 };
+
+//Ao salvar um objetoDado verifica se existe na tabela objetivo a existencia do objetivo e indicador
+function verificaObjetivoIndicador(listaBanco,arrayArquivo){	
+	for(var i = 0;i < arrayArquivo.length;i++){
+		for(var j = 0;j < listaBanco.length;j++){
+			if(listaBanco[j].objetivo == arrayArquivo[i].objetivo && 
+  		   listaBanco[j].indicador == arrayArquivo[i].indicador){
+				console.log('Irá salvar : ' + arrayArquivo[i].objetivo);
+				mainDb.setDB(arrayArquivo[i], listaBanco[j].id);
+			}
+		}
+	}
+}

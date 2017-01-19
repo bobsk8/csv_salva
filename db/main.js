@@ -14,7 +14,34 @@ const
 module.exports.criaDB = _criaDB;
 module.exports.setDB  = _setDB;
 module.exports.findObjetivoDado = _findObjetivoDado;
+module.exports.findObjetivo = _findObjetivo;
 module.exports.update = _update;
+
+
+let Objetivo = sequelize.define('objetivo', {
+id: {
+  type: Sequelize.BIGINT,
+  autoIncrement: true,
+  primaryKey: true
+},
+objetivo: {
+  type: Sequelize.STRING
+},
+meta: {
+  type: Sequelize.DOUBLE
+},
+indicador: {
+  type: Sequelize.STRING
+},
+responsavel: {
+  type: Sequelize.STRING
+},
+mensuracao: {
+  type: Sequelize.STRING
+}
+}, {
+freezeTableName: true 
+});
 
 
 let ObjetivoDado = sequelize.define('objetivodado', {
@@ -48,7 +75,7 @@ function _criaDB(){
   });
 };
 
-function _setDB(objetivoDado){ 
+function _setDB(objetivoDado, id){ 
   ObjetivoDado.sync({force: false}).then(function () {
     console.log('tabela criada ' + objetivoDado.objetivo);
     return ObjetivoDado.create({
@@ -56,7 +83,7 @@ function _setDB(objetivoDado){
     indicador: objetivoDado.indicador,
     data: objetivoDado.data,
     valor: objetivoDado.valor,
-    objetivoId:1
+    objetivoId:id
   });  
   });
 };
@@ -77,6 +104,16 @@ function _findObjetivoDado(funcao){
   ObjetivoDado.findAll()
     .then((objdado)=>{
       funcao(objdado);
+    })
+    .catch((err)=>{
+      console.log('error ' + err);
+    });
+}
+
+function _findObjetivo(funcao){
+  Objetivo.findAll()
+    .then((obj)=>{
+      funcao(obj);
     })
     .catch((err)=>{
       console.log('error ' + err);
