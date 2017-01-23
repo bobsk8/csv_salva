@@ -81,12 +81,23 @@ function _setDB(objetivoDado, id){
     return ObjetivoDado.create({
     objetivo: objetivoDado.objetivo,
     indicador: objetivoDado.indicador,
-    data: objetivoDado.data,
+    data: formatDate(objetivoDado.data),
     valor: objetivoDado.valor,
     objetivoId:id
   });  
   });
 };
+
+//Formata a data do objeto csv q está sendo enviado para persistir no banco.
+  function formatDate(data){
+    var dataConcat = '';
+    let dia = data.substring(0,2);
+    let mes = data.substring(3,5);
+    let ano = data.substring(6,12); 
+    
+    dataConcat = ano + '-' + mes + '-' + dia;
+    return dataConcat;
+  }
 
 function _update(objDado,id){
    ObjetivoDado.update({

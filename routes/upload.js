@@ -53,18 +53,23 @@
 	  		
 	  		if(listaBanco[j].objetivo == arrayArquivo[i].objetivo && 
 	  		   listaBanco[j].indicador == arrayArquivo[i].indicador){
-	      			if(convertDate(listaBanco[j].data) != arrayArquivo[i].data ||
+	      			if(convertDate(listaBanco[j].data) == arrayArquivo[i].data &&
 	      				listaBanco[j].valor != arrayArquivo[i].valor){
-	      					//Formata a data do objeto csv q está sendo enviado para o correto update
-	      					arrayArquivo[i].data = formatDate(arrayArquivo[i].data);
 	      					//Irá chamar o update caso a data ou o valor estejam diferentes
-	      					mainDb.update(arrayArquivo[i],listaBanco[j].id);	      					
+	      					//mainDb.update(arrayArquivo[i],listaBanco[j].id);
+	      					console.log('passou update ' + listaBanco[j].valor + ' - ' + arrayArquivo[i].valor);
+	      			}else if(convertDate(listaBanco[j].data) != arrayArquivo[i].data){	      				
+	      				//mainDb.setDB(arrayArquivo[i], listaBanco[j].id);
+	      				console.log();
+	      				console.log('passou, abaixo update ' + listaBanco[j].valor + ' - ' + arrayArquivo[i].valor);
+	      				console.log();
 	      			}
 	    		}
 	  		}
 	  	}
 
 	}else{	
+			console.log('caiu aqui');
 			//Quando a tabela objetivoDado estiver vazia irá para esse else			
 			mainDb.findObjetivo(function(listaBanco){  		
 	  		//chama a função que irá varrer o banco a procura da existencia de objetivo e indicador iguais 
@@ -72,17 +77,6 @@
 	  	});
 
 		}
-	}
-
-	//Formata a data do objeto csv q está sendo enviado para persistir no banco.
-	function formatDate(data){
-		var dataConcat = '';
-		let dia = data.substring(0,2);
-		let mes = data.substring(3,5);
-		let ano = data.substring(6,12);	
-		
-		dataConcat = ano + '-' + mes + '-' + dia;
-		return dataConcat;
 	}
 
 	//converte a data do banco para a mesma do arquivo csv que está sendo enviado.
@@ -121,9 +115,8 @@
 		for(var i = 0;i < arrayArquivo.length;i++){
 			for(var j = 0;j < listaBanco.length;j++){
 				if(listaBanco[j].objetivo == arrayArquivo[i].objetivo && 
-	  		   		listaBanco[j].indicador == arrayArquivo[i].indicador){
-					arrayArquivo[i].data = formatDate(arrayArquivo[i].data);				
-					mainDb.setDB(arrayArquivo[i], listaBanco[j].id);
+	  		   		listaBanco[j].indicador == arrayArquivo[i].indicador){									
+			//		mainDb.setDB(arrayArquivo[i], listaBanco[j].id);
 				}
 			}
 		}
