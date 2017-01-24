@@ -16,6 +16,7 @@ module.exports.setDB  = _setDB;
 module.exports.findObjetivoDado = _findObjetivoDado;
 module.exports.findObjetivo = _findObjetivo;
 module.exports.update = _update;
+module.exports.findUltimoObjetivoDado = _findUltimoObjetivoDado;
 
 
 let Objetivo = sequelize.define('objetivo', {
@@ -101,7 +102,7 @@ function _setDB(objetivoDado, id){
 
 function _update(objDado,id){
    ObjetivoDado.update({
-       data: objDado.data,
+       data: formatDate(objDado.data),
        valor : objDado.valor
      },{
        where: { id: id }
@@ -119,6 +120,24 @@ function _findObjetivoDado(funcao){
     .catch((err)=>{
       console.log('error ' + err);
     });
+}
+
+function _findUltimoObjetivoDado(objetivoParam,indicadorParam,funcao){
+  ObjetivoDado.findOne(
+  {
+    where:{
+            objetivo:objetivoParam,
+            indicador:indicadorParam
+            },order: [
+                ['data','DESC']
+                    ]
+            })
+  .then((objdado)=>{
+    funcao(objdado);
+  })
+  .catch((err)=>{
+    console.log('error ' + err);
+  });
 }
 
 function _findObjetivo(funcao){
